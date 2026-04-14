@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user settings and streak information.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string", "format": "uri" },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "wakeUpTime": { "type": "string" },
+            "sleepTime": { "type": "string" },
+            "workPreference": { "type": "string", "enum": ["morning", "night"] }
+          }
+        },
+        "streak": { "type": "integer" },
+        "lastActiveDate": { "type": "string" }
+      },
+      "required": ["uid", "email", "settings"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Represents a single task or habit.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["study", "fitness", "habit"] },
+        "duration": { "type": "integer" },
+        "status": { "type": "string", "enum": ["pending", "completed", "skipped", "rescheduled"] },
+        "preferredTime": { "type": "string" },
+        "scheduledTime": { "type": "string" },
+        "date": { "type": "string" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+        "createdAt": { "type": "integer" },
+        "recurrence": { "type": "string", "enum": ["none", "daily", "weekly", "monthly"] }
+      },
+      "required": ["id", "uid", "title", "type", "duration", "status", "date"]
+    },
+    "DailyStats": {
+      "title": "Daily Stats",
+      "description": "Aggregated daily stats for a user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "date": { "type": "string" },
+        "completedTasks": { "type": "integer" },
+        "totalTasks": { "type": "integer" },
+        "completionRate": { "type": "integer" }
+      },
+      "required": ["uid", "date", "completedTasks", "totalTasks", "completionRate"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "UserProfile",
+      "description": "User profile documents."
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Individual task documents."
+    },
+    "/stats/{statsId}": {
+      "schema": "DailyStats",
+      "description": "Daily statistics documents."
+    }
+  }
+}
